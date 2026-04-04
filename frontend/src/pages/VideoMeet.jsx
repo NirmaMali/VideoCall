@@ -4,7 +4,6 @@ import { Badge, IconButton, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
-import CallEndIcon from '@mui/icons-material/CallEnd'
 import MicIcon from '@mui/icons-material/Mic'
 import MicOffIcon from '@mui/icons-material/MicOff'
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
@@ -245,6 +244,7 @@ export default function VideoMeetComponent() {
         oscillator.start(); ctx.resume()
         return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false })
     }
+
     let black = ({ width = 640, height = 480 } = {}) => {
         let canvas = Object.assign(document.createElement("canvas"), { width, height })
         canvas.getContext('2d').fillRect(0, 0, width, height)
@@ -305,11 +305,13 @@ export default function VideoMeetComponent() {
                     display: 'flex', flexDirection: 'column',
                     alignItems: 'center', justifyContent: 'center', gap: '20px'
                 }}>
-                    <h2 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 600, margin: 0 }}>Join Meeting</h2>
+                    <h2 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 600, margin: 0 }}>
+                        Join Meeting
+                    </h2>
 
                     <div style={{
                         position: 'relative', borderRadius: '16px', overflow: 'hidden',
-                        width: '400px', height: '250px', background: '#2d2d2d'
+                        width: '500px', height: '340px', background: '#2d2d2d'
                     }}>
                         <video ref={localVideoref} autoPlay muted
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -345,8 +347,12 @@ export default function VideoMeetComponent() {
 
                 /* ── MEETING ── */
                 <div style={{
-                    width: '100vw', height: '100vh', background: '#1c1c1c',
-                    display: 'flex', flexDirection: 'column', overflow: 'hidden'
+                    width: '100vw',
+                    height: '100vh',
+                    background: '#1c1c1c',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden'
                 }}>
 
                     {/* TOP BAR */}
@@ -356,32 +362,42 @@ export default function VideoMeetComponent() {
                         justifyContent: 'space-between', padding: '0 20px',
                         borderBottom: '1px solid #3d3d3d'
                     }}>
-                        <span style={{ color: 'white', fontWeight: 700, fontSize: '1rem' }}>📹 Video Call </span>
+                        <span style={{ color: 'white', fontWeight: 700, fontSize: '1rem' }}>📹 Video Call</span>
                         <span style={{ color: '#aaa', fontSize: '0.85rem' }}>
                             {totalParticipants} participant{totalParticipants !== 1 ? 's' : ''}
                         </span>
                     </div>
 
                     {/* MAIN AREA */}
-                    <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+                    <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
 
                         {/* VIDEO GRID */}
                         <div style={{
-                            flex: 1, display: 'grid',
+                            flex: 1,
+                            display: 'grid',
                             ...getGridStyle(totalParticipants),
-                            gap: '8px', padding: '12px',
-                            alignContent: 'center', justifyItems: 'stretch',
-                            overflow: 'hidden'
+                            gridAutoRows: '1fr',
+                            gap: '8px',
+                            padding: '12px',
+                            alignContent: 'stretch',
+                            justifyItems: 'stretch',
+                            overflow: 'hidden',
+                            minHeight: 0
                         }}>
 
                             {/* Local tile */}
                             <div style={{
-                                position: 'relative', background: '#2d2d2d',
-                                borderRadius: '12px', overflow: 'hidden',
-                                border: '2px solid #444', aspectRatio: '16/9'
+                                position: 'relative',
+                                background: '#2d2d2d',
+                                borderRadius: '12px',
+                                overflow: 'hidden',
+                                border: '2px solid #444',
+                                height: '100%',
+                                minHeight: 0
                             }}>
+                                {/* objectFit: 'fill' — stretches video to fill tile exactly, no crop, no black bars */}
                                 <video ref={localVideoref} autoPlay muted
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                                    style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block' }} />
                                 {!video && (
                                     <div style={{
                                         position: 'absolute', inset: 0, background: '#2a2a2a',
@@ -419,15 +435,20 @@ export default function VideoMeetComponent() {
                             {/* Remote tiles */}
                             {videos.map((v) => (
                                 <div key={v.socketId} style={{
-                                    position: 'relative', background: '#2d2d2d',
-                                    borderRadius: '12px', overflow: 'hidden',
-                                    border: '2px solid #444', aspectRatio: '16/9'
+                                    position: 'relative',
+                                    background: '#2d2d2d',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    border: '2px solid #444',
+                                    height: '100%',
+                                    minHeight: 0
                                 }}>
+                                    {/* objectFit: 'fill' — stretches video to fill tile exactly, no crop, no black bars */}
                                     <video
                                         data-socket={v.socketId}
                                         ref={ref => { if (ref && v.stream) ref.srcObject = v.stream; }}
                                         autoPlay
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                        style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block' }}
                                     />
                                     <div style={{
                                         position: 'absolute', bottom: '8px', left: '8px',
