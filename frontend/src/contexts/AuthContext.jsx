@@ -68,6 +68,8 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    // Below function is used to add a meeting code to the user's history of meetings attended. This is called when a user joins a meeting.
+
     const addToUserHistory = async (meetingCode) => {
         try {
             let request = await client.post("/add_to_activity", {
