@@ -6,6 +6,8 @@ import crypto from "crypto"
 import { Meeting } from "../models/meeting.model.js";
 const login = async (req, res) => {
 
+
+    // Below function is used to login a user. It checks if the user exists, if yes it compares the password and if the password is correct it generates a token and saves it to the database and returns the token to the client.
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -36,16 +38,15 @@ const login = async (req, res) => {
     }
 }
 
-
+// Below function is used to register a user. It checks if the user already exists, if not it hashes the password and saves the user to the database.
 const register = async (req, res) => {
     const { name, username, password } = req.body;
-
-
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(httpStatus.FOUND).json({ message: "User already exists" });
         }
+
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
