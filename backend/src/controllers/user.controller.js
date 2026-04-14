@@ -66,6 +66,7 @@ const register = async (req, res) => {
 
 }
 
+// Below function is used to get the user's history. It checks if the user exists and if yes it returns the user's history.
 
 const getUserHistory = async (req, res) => {
     const { token } = req.query;
