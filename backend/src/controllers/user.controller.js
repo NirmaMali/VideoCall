@@ -80,6 +80,7 @@ const getUserHistory = async (req, res) => {
     }
 }
 
+// Below function is used to add a meeting code to the user's history. It checks if the user exists and if yes it adds the meeting code to the user's history.
 const addToHistory = async (req, res) => {
     const { token, meeting_code } = req.body;
 
