@@ -23,6 +23,7 @@ app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
 app.use("/api/users", userRoutes);
 
+// Below function is used to start the server. It connects to the MongoDB database and starts the server on the specified port. It also logs the connection status of the database and the server.
 const start = async () => {
     app.set("mongo_user")
     const connectionDb = await mongoose.connect(process.env.MONGO_URI);
