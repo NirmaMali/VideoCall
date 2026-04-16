@@ -5,6 +5,8 @@ let connections = {}
 let messages = {}
 let timeOnline = {}
 
+
+// Below function is used to connect to the socket. It initializes the socket and listens for events such as "join-call", "signal", "chat-message" and "disconnect". It also manages the connections and messages for each room.
 export const connectToSocket = (server) => {
     const io = new Server(server, {
         cors: {
